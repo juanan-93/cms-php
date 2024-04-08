@@ -1,3 +1,10 @@
+<?php
+
+    $blog = ControladorBlog::ctrMostrarBlog();
+   
+
+?>
+
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -6,7 +13,35 @@
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
         
-        <title>Juanito Travel</title>
+        <title> <?php echo $blog["titulo"] ?> </title>
+
+        <meta name="title" content="<?php echo $blog["titulo"] ?>">
+
+        <meta name="description" content="<?php echo $blog["descripcion"] ?>">
+
+        <?php 
+            // convertir el string en un array de verdad
+            $palabras_claves = json_decode($blog["palabras_claves"], true);
+
+            //UNA VARIABLE VACIA DONDE METER LAS PALABRAS CLAVES
+            $p_claves = "";
+
+            //recorremos un array 
+            foreach ($palabras_claves as $key => $value){
+                //PARA AGEGRA CADENAS DE STRING A UNA VARIABLE VACIA USAMOS EL .=  Y CON EL PUNTO CONCATENAMOS 
+                $p_claves .= $value.", ";
+            }
+
+            //QUITAMOS EL ULTIMO ESPACIO Y LA ULTIMA COMA con la funcion substr
+            $p_claves = substr($p_claves, 0, -2);
+
+        ?>
+
+        <meta name="keywords" content="<?php echo $p_claves ?>">
+
+        
+
+        
 
         <link rel="icon" href="vistas/img/icono.jpg">
 
@@ -66,7 +101,7 @@
         include "paginas/modulos/menu.php";
 
         //=============Navegacion entre paginas==================
-        include "paginas/articulos.php";
+        include "paginas/inicio.php";
 
         //=============modulos fijos inferiores==================
         include "paginas/modulos/footer.php";
