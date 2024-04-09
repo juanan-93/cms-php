@@ -222,16 +222,11 @@ CONTENIDO INICIO
 			<div class="d-none d-md-block pt-md-4 pt-lg-0 col-md-4 col-lg-3">
 
 				<!-- SOBRE MI -->
+				<?php
 
-				<div class="sobreMi">
-					
-					<h4>Sobre Mi</h4>
+					echo $blog["sobre_mi"]
 
-					<img src="vistas/img/sobreMi.jpg" alt="Lorem ipsum dolor sit amet" class="img-fluid my-1">
-
-					<p class="small">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum odio, eos architecto atque numquam alias laboriosam minima beatae consectetur.</p>
-
-				</div>
+				?>
 
 				<!-- Artículos destacados -->
 

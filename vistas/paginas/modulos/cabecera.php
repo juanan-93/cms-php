@@ -23,20 +23,21 @@ CABECERA
 			<div class="d-none d-md-block col-md-2 redes">
 				
 				<ul class="d-flex justify-content-end pt-3 mt-1">
-
-					<?php
+	
+					<?php	
 						$redesSociales = json_decode($blog["redes_sociales"], true);
-							 
-						foreach ($redesSociales as $key => $value) {
+
+						foreach($redesSociales as $key => $value){
+
 							echo '<li>
 									<a href="'.$value["url"].'" target="_blank">
-										<i class=" '.$value["icono"].' lead rounded-circle text-white mr-1"></i>
+										<i class="'.$value["icono"].' lead rounded-circle text-white mr-1"></i>
 									</a>
 								</li>';
 						}
 
 					?>
-
+				
 				</ul>
 
 			</div>
