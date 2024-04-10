@@ -107,29 +107,24 @@
 
             //condicional para navegar entre lasa paginas con las rutas de las categorias
             //se define la variable get en el archivo .htaccess
-            if(isset($_GET["pagina"])){
-
-                foreach ($categorias as $key => $value){
-
-                    if($_GET["pagina"] == $value["ruta_categoria"]){
-
-                        include "paginas/categoria.php";
-                    }else{
-
-                        include "paginas/404.php";
-                        
-                        // para roper el ciclo del foreach wn caso de error
-                        break;
-                    }
+            if(isset($_GET["pagina"])) {
+                $pageFound = false;
+                foreach($categorias as $key=>$element) {
+                       if($_GET["pagina"] == $element["ruta_categoria"]){
+                              $pageFound = true;
+                              include "paginas/categoria.php";
+                       }
+                }
+          
+                if(!$pageFound){
+                    include "paginas/404.php";
                 }
 
-            }else{
-
+            }else {
                 include "paginas/inicio.php";
             }
 
-                
-           
+            
 
        
 

@@ -1,4 +1,7 @@
+
+
 <div class="container-fluid text-center bg-white p-5">
+
     </br>
     </br>
     <h1>404</h1>
