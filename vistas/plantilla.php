@@ -15,7 +15,7 @@
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
         
-        <title> <?php echo $blog["titulo"] ?> </title>
+        <title> <?php echo $blog["titulo"]; ?> </title>
 
         <meta name="title" content="<?php echo $blog["titulo"] ?>">
 
@@ -97,32 +97,41 @@
         
         <?php
         //=============modulos fijos superiores ==================
-        include "paginas/modulos/cabecera.php";
-        include "paginas/modulos/redes-sociales-movil.php";
-        include "paginas/modulos/buscador-movil.php";
-        include "paginas/modulos/menu.php";
+
+            include "paginas/modulos/cabecera.php";
+            include "paginas/modulos/redes-sociales-movil.php";
+            include "paginas/modulos/buscador-movil.php";
+            include "paginas/modulos/menu.php";
 
         //=============Navegacion entre paginas==================
 
-        if(isset($_GET["pagina"])){
+            //condicional para navegar entre lasa paginas con las rutas de las categorias
+            //se define la variable get en el archivo .htaccess
+            if(isset($_GET["pagina"])){
 
-          foreach ($categorias as $key => $value) {
+                foreach ($categorias as $key => $value){
 
-            if($_GET["pagina"] == $value["ruta_categoria"]){
+                    if($_GET["pagina"] == $value["ruta_categoria"]){
 
+                        include "paginas/categoria.php";
+                    }else{
 
+                        include "paginas/404.php";
+                        
+                        // para roper el ciclo del foreach wn caso de error
+                        break;
+                    }
+                }
 
             }else{
-                    
+
                 include "paginas/inicio.php";
             }
 
-          }
+                
+           
 
-        }
-
-
-        include "paginas/inicio.php";
+       
 
         //=============modulos fijos inferiores==================
         include "paginas/modulos/footer.php";
