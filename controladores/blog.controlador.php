@@ -23,6 +23,29 @@ class ControladorBlog{
         return $respuesta;
     }
 
+    //metodo para mostrar articulos y categorias con inner join
+    static public function ctrMostrarConInnerJoin($cantidad){
+        //creamos una variable para la cantidad de articulos que queremos mostrar y le pasamos el valor desde la vista que es 5
+        //nombre de la tabla con la que vamos a trabajar
+        $tabla1 = "categorias";
+        $tabla2 = "articulos";
+        //se manda a llamar el modelo de la tabla categorias
+        $respuestas = ModeloBlog::mdlMostrarConInnerJoin( $tabla1, $tabla2, $cantidad);
+        //se retorna la respuesta
+        return $respuestas;
+        
+    }
+
+    //metodo para mostrar el total de articulos
+    static public function ctrMostrarTotalArticulos(){
+        //nombre de la tabla con la que vamos a trabajar
+        $tabla = "articulos";
+        //se manda a llamar el modelo de la tabla articulos
+        $respuesta = ModeloBlog::mdlMostrarTotalArticulos($tabla);
+        //se retorna la respuesta
+        return $respuesta;
+    }
+
 }
 
 

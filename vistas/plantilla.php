@@ -2,8 +2,15 @@
 
     $blog = ControladorBlog::ctrMostrarBlog();
     $categorias = ControladorBlog::ctrMostrarCategorias();
+    $articulos = ControladorBlog::ctrMostrarConInnerJoin(5);
+    //paginacion 
+    $totalArticulos = ControladorBlog::ctrMostrarTotalArticulos();
+    //dividimos el total de articulos entre 5 para saber cuantas paginas vamos a tener y con la funcion ceil redondeamos hacia arriba
+    $totalPaginas = ceil(count($totalArticulos)/5);
    
-   
+
+  
+    
 
 ?>
 
@@ -14,34 +21,97 @@
         <meta charset="UTF-8">
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        
-        <title> <?php echo $blog["titulo"]; ?> </title>
+    <?php
 
-        <meta name="title" content="<?php echo $blog["titulo"] ?>">
+        //condicional para definir los metas de las categorias
 
-        <meta name="description" content="<?php echo $blog["descripcion"] ?>">
+        if (isset($_GET["pagina"])) {
+            foreach ($categorias as $key => $value) {
 
-        <?php 
-            // convertir el string en un array de verdad
-            $palabras_claves = json_decode($blog["palabras_claves"], true);
+                if ($_GET["pagina"] == $value["ruta_categoria"]) {
 
-            //UNA VARIABLE VACIA DONDE METER LAS PALABRAS CLAVES
-            $p_claves = "";
+                    echo' 
+                        <title>'.$blog["titulo"].'|'.$value["descripcion_categoria"].'</title>
+                
+                        <meta name="title" content="'.$value["titulo_categoria"].'>">
+                
+                        <meta name="description" content="'.$value["descripcion_categoria"].'">';
 
-            //recorremos un array 
-            foreach ($palabras_claves as $key => $value){
-                //PARA AGEGRA CADENAS DE STRING A UNA VARIABLE VACIA USAMOS EL .=  Y CON EL PUNTO CONCATENAMOS 
-                $p_claves .= $value.", ";
+                   
+                        $palabras_claves = json_decode($value["p_claves_categoria"], true);
+
+                        
+                        $p_claves = "";
+            
+                        //recorremos un array 
+                        foreach ($palabras_claves as $key => $value){
+                            
+                            $p_claves .= $value.", ";
+                        }
+            
+                  
+                        $p_claves = substr($p_claves, 0, -2);
+
+                            echo '<meta name="keywords" content="'.$p_claves.'">';
+                                
+                } else {
+                    echo' 
+                        <title>'.$blog["titulo"].'</title>
+                
+                        <meta name="title" content=" '.$blog["titulo"].'">
+                
+                        <meta name="description" content="'.$blog["descripcion"].'">';
+
+         
+                        $palabras_claves = json_decode($blog["palabras_claves"], true);
+
+                        //UNA VARIABLE VACIA DONDE METER LAS PALABRAS CLAVES
+                        $p_claves = "";
+ 
+       
+                    foreach ($palabras_claves as $key => $value){
+                        //PARA AGEGRA CADENAS DE STRING A UNA VARIABLE VACIA USAMOS EL .=  Y CON EL PUNTO CONCATENAMOS 
+                        $p_claves .= $value.", ";
+                }
+    
+         
+                    $p_claves = substr($p_claves, 0, -2);
+
+                        echo '<meta name="keywords" content="'.$p_claves.'">';
+
+
+                    break;
+                }
             }
+        } else {
+            echo' 
+            <title>'.$blog["titulo"].'</title>
+    
+            <meta name="title" content=" '.$blog["titulo"].'">
+    
+            <meta name="description" content="'.$blog["descripcion"].'">';
 
-            //QUITAMOS EL ULTIMO ESPACIO Y LA ULTIMA COMA con la funcion substr
-            $p_claves = substr($p_claves, 0, -2);
+          
+             $palabras_claves = json_decode($blog["palabras_claves"], true);
 
-        ?>
+          
+             $p_claves = "";
+ 
+             
+             foreach ($palabras_claves as $key => $value){
+                 //PARA AGEGRA CADENAS DE STRING A UNA VARIABLE VACIA USAMOS EL .=  Y CON EL PUNTO CONCATENAMOS 
+                 $p_claves .= $value.", ";
+             }
+ 
+      
+             $p_claves = substr($p_claves, 0, -2);
 
-        <meta name="keywords" content="<?php echo $p_claves ?>">
+                echo '<meta name="keywords" content="'.$p_claves.'">';
+        }
 
-        
+
+    ?>
+
 
         
 
@@ -111,8 +181,8 @@
                 $pageFound = false;
                 foreach($categorias as $key=>$element) {
                        if($_GET["pagina"] == $element["ruta_categoria"]){
-                              $pageFound = true;
-                              include "paginas/categoria.php";
+                            $pageFound = true;
+                            include "paginas/categoria.php";
                        }
                 }
           
@@ -132,7 +202,7 @@
         include "paginas/modulos/footer.php";
         
         ?>
-
+        <input type="hidden" id="rutaActual" value="<?php echo $blog["dominio"]; ?>">
      <script src="vistas/js/script.js"></script>
 
     </body>

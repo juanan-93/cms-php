@@ -93,16 +93,24 @@ $(".grid figure, .gridFooter figure").click(function(){
 /*=============================================
 PAGINACIÓN
 =============================================*/
+// con esta variable cojemos el numemro y se lo pasamos a la paginacion en totalpages por totalPaginas
+var totalPaginas = Number($(".pagination").attr("totalPaginas"));
+var rutaActual = $("#pagination").val();	
 
 $(".pagination").twbsPagination({
-	totalPages: 10,
+	totalPages: totalPaginas,
 	visiblePages: 4,
 	first: "Primero",
 	last: "Último",
 	prev: '<i class="fas fa-angle-left"></i>',
 	next: '<i class="fas fa-angle-right"></i>'
 
-});
+}).on("page", function(evt, page){
+
+	window.location = rutaActual+page;
+
+
+})
 
 
 /*=============================================
