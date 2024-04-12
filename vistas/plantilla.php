@@ -2,16 +2,12 @@
 
     $blog = ControladorBlog::ctrMostrarBlog();
     $categorias = ControladorBlog::ctrMostrarCategorias();
-    $articulos = ControladorBlog::ctrMostrarConInnerJoin(5);
+    //los parametros que se le pasan a la funcion ctrMostrarConInnerJoin son el limite de articulos que se quieren mostrar
+    $articulos = ControladorBlog::ctrMostrarConInnerJoin(0,5);
     //paginacion 
     $totalArticulos = ControladorBlog::ctrMostrarTotalArticulos();
     //dividimos el total de articulos entre 5 para saber cuantas paginas vamos a tener y con la funcion ceil redondeamos hacia arriba
     $totalPaginas = ceil(count($totalArticulos)/5);
-   
-
-  
-    
-
 ?>
 
 <!DOCTYPE html>
@@ -177,29 +173,123 @@
 
             //condicional para navegar entre lasa paginas con las rutas de las categorias
             //se define la variable get en el archivo .htaccess
-            if(isset($_GET["pagina"])) {
-                $pageFound = false;
-                foreach($categorias as $key=>$element) {
-                       if($_GET["pagina"] == $element["ruta_categoria"]){
-                            $pageFound = true;
-                            include "paginas/categoria.php";
-                       }
+
+            $validarRuta = "";
+
+            if(isset($_GET["pagina"])){
+        
+                $rutas = explode("/", $_GET["pagina"]);
+                
+                if(is_numeric($rutas[0])){
+        
+                    $desde = ($rutas[0] -1)* 5;
+        
+                    $cantidad = 5;
+        
+                    $articulos = ControladorBlog::ctrMostrarConInnerJoin($desde, $cantidad, null, null);
+        
+                }else{
+        
+                    foreach ($categorias as $key => $value) {
+                    
+                        if($rutas[0] == $value["ruta_categoria"]){
+        
+                            $validarRuta = "categorias";
+        
+                            break;
+        
+                        }else if($rutas[0] == "sobre-mi"){
+        
+                            $validarRuta = "sobre-mi";
+        
+                            break;
+        
+                        }else{
+        
+                            $validarRuta = "buscador";
+                        }
+                    }
+        
                 }
-          
-                if(!$pageFound){
+        
+                /*=============================================
+                Indice 1: Rutas de Artículos o Paginación de categorías
+                =============================================*/
+        
+                if(isset($rutas[1])){
+        
+                    if(is_numeric($rutas[1])){
+        
+                        $desde = ($rutas[1] -1)* 5;
+        
+                        $cantidad = 5;
+        
+                        $articulos = ControladorBlog::ctrMostrarConInnerJoin($desde, $cantidad, null, null);
+        
+                    }else{
+        
+                        foreach ($totalArticulos as $key => $value) {
+                        
+                            if($rutas[1] == $value["ruta_articulo"]){
+        
+                                $validarRuta = "articulos";
+        
+                                break;
+        
+                            }
+                        }
+        
+                    }
+        
+        
+                }
+        
+                /*=============================================
+                Validar las rutas
+                =============================================*/
+                if($validarRuta == "categorias"){
+        
+                    include "paginas/categorias.php";
+        
+                }else if($validarRuta == "buscador"){
+        
+                    include "paginas/buscador.php";
+        
+                }else if($validarRuta == "sobre-mi"){
+        
+                    include "paginas/sobre-mi.php";
+        
+                }else if($validarRuta == "articulos"){
+        
+                    include "paginas/articulos.php";
+        
+                }else if(is_numeric($rutas[0]) && $rutas[0] <= $totalPaginas){
+        
+                    include "paginas/inicio.php";
+        
+                }else if(isset($rutas[1]) && is_numeric($rutas[1])){
+        
+                    include "paginas/inicio.php";
+        
+                }else{
+        
                     include "paginas/404.php";
                 }
-
-            }else {
+        
+        
+            }else{
+        
                 include "paginas/inicio.php";
-            }
+        
+            }	
+        
 
             
 
        
 
-        //=============modulos fijos inferiores==================
-        include "paginas/modulos/footer.php";
+         //=============modulos fijos inferiores==================
+            include "paginas/modulos/footer.php";
         
         ?>
         <input type="hidden" id="rutaActual" value="<?php echo $blog["dominio"]; ?>">
